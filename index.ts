@@ -18,7 +18,7 @@ async function main(): Promise<boolean> {
 		const { project, task, command, status, duration } = taskInfo;
 		anyErrors = anyErrors || status === "failed";
 		const target = `${project}:${task}`;
-		const durationStr = status !== "skipped" ? ` (${formatDuration(duration)})` : "";
+		const durationStr = status !== "skipped" ? ` ${dim(`(${formatDuration(duration)}`)}` : "";
 		writeGroup(`${statusBadges[status]} ${bold(target)}${durationStr}`, ({ println }) => {
 			if (command) {
 				println(blue(`$ ${command}`));
@@ -163,10 +163,27 @@ function blue(text: string): string {
 	return `\u001b[34m${text}\u001b[39m`;
 }
 
-function formatDuration(duration: { secs: number; nanos: number }): string {
-	const totalSeconds = duration.secs + duration.nanos / 1_000_000_000;
-	return totalSeconds.toFixed(1) + "s";
+function dim(text: string): string {
+	return `\u001b[2m${text}\u001b[22m`;
 }
+
+function formatDuration(duration: { secs: number; nanos: number }): string {
+	const totalMs = duration.secs * 1000 + duration.nanos / 1_000_000;
+	let seconds = Math.floor(totalMs / 1000);
+	let milliseconds = Math.round(totalMs % 1000);
+	// Handle overflow when rounding milliseconds up to 1000
+	if (milliseconds === 1000) {
+		seconds += 1;
+		milliseconds = 0;
+	}
+	if (seconds === 0) {
+		return `${milliseconds}ms)`;
+	}
+	return `${seconds}s ${milliseconds}ms)`;
+}
+
+// Export for testing purposes
+export { formatDuration };
 
 const stdoutBadge = bgDarkGray(`　${green("⏺")} STDOUT　`);
 const stderrBadge = bgDarkGray(`　${red("⏺")} STDERR　`);
