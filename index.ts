@@ -32,7 +32,7 @@ async function main(): Promise<boolean> {
 		const { project, task, command, status, duration } = taskInfo;
 		anyErrors = anyErrors || status === "failed";
 		const target = `${project}:${task}`;
-		const histogram = status !== "skipped" ? ` ${renderHistogram(duration, maxDurationMs)}` : "";
+		const histogram = ` ${status === "skipped" ? renderSkippedHistogram() : renderHistogram(duration, maxDurationMs)}`;
 		const durationStr = status !== "skipped" ? ` ${gray(`(${formatDuration(duration)}`)}` : "";
 		writeGroup(`${statusBadges[status]}${histogram} ${bold(target)}${durationStr}`, ({ println }) => {
 			if (command) {
@@ -233,6 +233,10 @@ function renderHistogram(duration: { secs: number; nanos: number }, maxDurationM
 	}
 
 	return bar;
+}
+
+function renderSkippedHistogram(): string {
+	return gray("⣿⣿⣿⣿⣿");
 }
 
 // Export for testing purposes
