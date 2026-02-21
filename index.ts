@@ -9,17 +9,32 @@ async function main(): Promise<boolean> {
 		console.log("CI report file does not exist. No CI tasks may have been executed.");
 		return anyErrors;
 	}
+
+	// First pass: collect tasks and find max duration
+	const taskActions: Array<{ action: Action; taskInfo: TaskInfo }> = [];
+	let maxDurationMs = 0;
+
 	for (const action of ciReport.actions) {
 		const taskInfo = taskInfoOf(action);
 		if (!taskInfo) {
 			continue;
 		}
+		taskActions.push({ action, taskInfo });
+		if (taskInfo.status !== "skipped") {
+			const durationMs = taskInfo.duration.secs * 1000 + taskInfo.duration.nanos / 1_000_000;
+			maxDurationMs = Math.max(maxDurationMs, durationMs);
+		}
+	}
+
+	// Second pass: display tasks with histograms
+	for (const { taskInfo } of taskActions) {
 		const { stdout, stderr } = await readStatus({ workspaceRoot, taskInfo });
 		const { project, task, command, status, duration } = taskInfo;
 		anyErrors = anyErrors || status === "failed";
 		const target = `${project}:${task}`;
+		const histogram = status !== "skipped" ? renderHistogram(duration, maxDurationMs) : "";
 		const durationStr = status !== "skipped" ? ` ${gray(`(${formatDuration(duration)}`)}` : "";
-		writeGroup(`${statusBadges[status]} ${bold(target)}${durationStr}`, ({ println }) => {
+		writeGroup(`${statusBadges[status]}${histogram} ${bold(target)}${durationStr}`, ({ println }) => {
 			if (command) {
 				println(blue(`$ ${command}`));
 			}
@@ -182,8 +197,37 @@ function formatDuration(duration: { secs: number; nanos: number }): string {
 	return `${seconds}s ${milliseconds}ms)`;
 }
 
+function renderHistogram(duration: { secs: number; nanos: number }, maxDurationMs: number): string {
+	const durationMs = duration.secs * 1000 + duration.nanos / 1_000_000;
+	if (maxDurationMs === 0) {
+		return "     ";
+	}
+	const percentage = (durationMs / maxDurationMs) * 100;
+	const barWidth = 5;
+	const fillLevel = (percentage / 100) * barWidth; // 0-5
+
+	const brailleColumns = ["⠀", "⣀", "⣄", "⣆", "⣇", "⣧", "⣷", "⣾", "⣿"];
+	let bar = "";
+
+	for (let i = 0; i < barWidth; i++) {
+		if (fillLevel <= i) {
+			bar += " ";
+			continue;
+		}
+		if (fillLevel >= i + 1) {
+			bar += "⣿";
+			continue;
+		}
+		const partialFill = (fillLevel - i) * 8;
+		const level = Math.round(partialFill);
+		bar += brailleColumns[level]!;
+	}
+
+	return bar;
+}
+
 // Export for testing purposes
-export { formatDuration };
+export { formatDuration, renderHistogram };
 
 const stdoutBadge = bgDarkGray(`　${green("⏺")} STDOUT　`);
 const stderrBadge = bgDarkGray(`　${red("⏺")} STDERR　`);
