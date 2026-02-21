@@ -32,7 +32,7 @@ async function main(): Promise<boolean> {
 		const { project, task, command, status, duration } = taskInfo;
 		anyErrors = anyErrors || status === "failed";
 		const target = `${project}:${task}`;
-		const histogram = status !== "skipped" ? renderHistogram(duration, maxDurationMs) : "";
+		const histogram = status !== "skipped" ? ` ${renderHistogram(duration, maxDurationMs)}` : "";
 		const durationStr = status !== "skipped" ? ` ${gray(`(${formatDuration(duration)}`)}` : "";
 		writeGroup(`${statusBadges[status]}${histogram} ${bold(target)}${durationStr}`, ({ println }) => {
 			if (command) {
@@ -200,7 +200,7 @@ function formatDuration(duration: { secs: number; nanos: number }): string {
 function renderHistogram(duration: { secs: number; nanos: number }, maxDurationMs: number): string {
 	const durationMs = duration.secs * 1000 + duration.nanos / 1_000_000;
 	if (maxDurationMs === 0) {
-		return "     ";
+		return gray("⣿⣿⣿⣿⣿");
 	}
 	const percentage = (durationMs / maxDurationMs) * 100;
 	const barWidth = 5;
@@ -211,7 +211,7 @@ function renderHistogram(duration: { secs: number; nanos: number }, maxDurationM
 
 	for (let i = 0; i < barWidth; i++) {
 		if (fillLevel <= i) {
-			bar += " ";
+			bar += gray("⣿");
 			continue;
 		}
 		if (fillLevel >= i + 1) {
