@@ -219,7 +219,7 @@ function renderHistogram(duration: { secs: number; nanos: number }, maxDurationM
 			continue;
 		}
 		const partialFill = (fillLevel - i) * 8;
-		const level = Math.round(partialFill);
+		const level = Math.max(1, Math.round(partialFill));
 		bar += brailleColumns[level]!;
 	}
 
