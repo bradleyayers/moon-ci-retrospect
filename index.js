@@ -176,7 +176,7 @@ function renderHistogram(duration, maxDurationMs) {
     const percentage = (durationMs / maxDurationMs) * 100;
     const barWidth = 5;
     const fillLevel = (percentage / 100) * barWidth; // 0-5
-    const brailleColumns = ["⠀", "⡀", "⡄", "⡆", "⡇", "⣇", "⣧", "⣷", "⣿"];
+    const brailleColumns = [" ", "⡀", "⡄", "⡆", "⡇", "⣇", "⣧", "⣷", "⣿"];
     let bar = "";
     for (let i = 0; i < barWidth; i++) {
         if (fillLevel <= i) {

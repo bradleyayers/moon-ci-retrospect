@@ -215,7 +215,7 @@ function renderHistogram(duration: { secs: number; nanos: number }, maxDurationM
 	const barWidth = 5;
 	const fillLevel = (percentage / 100) * barWidth; // 0-5
 
-	const brailleColumns = ["⠀", "⡀", "⡄", "⡆", "⡇", "⣇", "⣧", "⣷", "⣿"];
+	const brailleColumns = [" ", "⡀", "⡄", "⡆", "⡇", "⣇", "⣧", "⣷", "⣿"];
 	let bar = "";
 
 	for (let i = 0; i < barWidth; i++) {
