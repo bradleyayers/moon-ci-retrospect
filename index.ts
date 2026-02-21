@@ -18,7 +18,7 @@ async function main(): Promise<boolean> {
 		const { project, task, command, status, duration } = taskInfo;
 		anyErrors = anyErrors || status === "failed";
 		const target = `${project}:${task}`;
-		const durationStr = status !== "skipped" ? ` ${dim(`(${formatDuration(duration)}`)}` : "";
+		const durationStr = status !== "skipped" ? ` ${gray(`(${formatDuration(duration)}`)}` : "";
 		writeGroup(`${statusBadges[status]} ${bold(target)}${durationStr}`, ({ println }) => {
 			if (command) {
 				println(blue(`$ ${command}`));
@@ -163,8 +163,8 @@ function blue(text: string): string {
 	return `\u001b[34m${text}\u001b[39m`;
 }
 
-function dim(text: string): string {
-	return `\u001b[2m${text}\u001b[22m`;
+function gray(text: string): string {
+	return `\u001b[38;5;240m${text}\u001b[39m`;
 }
 
 function formatDuration(duration: { secs: number; nanos: number }): string {
