@@ -15,10 +15,11 @@ async function main(): Promise<boolean> {
 			continue;
 		}
 		const { stdout, stderr } = await readStatus({ workspaceRoot, taskInfo });
-		const { project, task, command, status } = taskInfo;
+		const { project, task, command, status, duration } = taskInfo;
 		anyErrors = anyErrors || status === "failed";
 		const target = `${project}:${task}`;
-		writeGroup(`${statusBadges[status]} ${bold(target)}`, ({ println }) => {
+		const durationStr = status !== "skipped" ? ` (${formatDuration(duration)})` : "";
+		writeGroup(`${statusBadges[status]} ${bold(target)}${durationStr}`, ({ println }) => {
 			if (command) {
 				println(blue(`$ ${command}`));
 			}
@@ -60,6 +61,7 @@ function taskInfoOf(action: Action): undefined | TaskInfo {
 		task,
 		command: commandOf(action),
 		status: action.status,
+		duration: action.duration,
 	};
 }
 
@@ -68,6 +70,7 @@ type TaskInfo = {
 	task: string;
 	command: undefined | string;
 	status: "failed" | "passed" | "skipped";
+	duration: { secs: number; nanos: number };
 };
 
 function parseTarget(target: string): { project: string; task: string } {
@@ -160,6 +163,11 @@ function blue(text: string): string {
 	return `\u001b[34m${text}\u001b[39m`;
 }
 
+function formatDuration(duration: { secs: number; nanos: number }): string {
+	const totalSeconds = duration.secs + duration.nanos / 1_000_000_000;
+	return totalSeconds.toFixed(1) + "s";
+}
+
 const stdoutBadge = bgDarkGray(`　${green("⏺")} STDOUT　`);
 const stderrBadge = bgDarkGray(`　${red("⏺")} STDERR　`);
 
@@ -173,18 +181,19 @@ type Action = {
 	status: "failed" | "passed" | "skipped";
 	node: Node;
 	operations: Operation[];
+	duration: { secs: number; nanos: number };
 };
 
 type Node =
 	| {
-			action: "run-task";
-			params: {
-				target: string;
-			};
-	  }
+		action: "run-task";
+		params: {
+			target: string;
+		};
+	}
 	| {
-			action: "sync-workspace" | "setup-tool" | "install-deps" | "sync-project" | "install-project-deps";
-	  };
+		action: "sync-workspace" | "setup-tool" | "install-deps" | "sync-project" | "install-project-deps";
+	};
 
 type Operation = {
 	meta: Meta;
@@ -192,12 +201,12 @@ type Operation = {
 
 type Meta =
 	| {
-			type: "task-execution";
-			command: string;
-	  }
+		type: "task-execution";
+		command: string;
+	}
 	| {
-			type: "archive-creation" | "hash-generation" | "no-operation" | "output-hydration";
-	  };
+		type: "archive-creation" | "hash-generation" | "no-operation" | "output-hydration";
+	};
 
 let anyErrors;
 
