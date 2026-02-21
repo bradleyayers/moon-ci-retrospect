@@ -56,25 +56,25 @@ test("renderHistogram", () => {
 	expect(renderHistogram({ secs: 0, nanos: 0 }, 100)).toBe("\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
 
 	// 12.5% (12.5ms / 100ms) → 62.5% through first slot
-	expect(renderHistogram({ secs: 0, nanos: 12_500_000 }, 100)).toBe("⣧\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
+	expect(renderHistogram({ secs: 0, nanos: 12_500_000 }, 100)).toBe("⣇\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
 
 	// 20% (20ms / 100ms) → exactly one full slot
 	expect(renderHistogram({ secs: 0, nanos: 20_000_000 }, 100)).toBe("⣿\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
 
 	// 25% (25ms / 100ms) → 1.25 slots filled
-	expect(renderHistogram({ secs: 0, nanos: 25_000_000 }, 100)).toBe("⣿⣄\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
+	expect(renderHistogram({ secs: 0, nanos: 25_000_000 }, 100)).toBe("⣿⣀\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
 
 	// 40% (40ms / 100ms) → 2 full slots
 	expect(renderHistogram({ secs: 0, nanos: 40_000_000 }, 100)).toBe("⣿⣿\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
 
 	// 50% (50ms / 100ms) → 2.5 slots filled
-	expect(renderHistogram({ secs: 0, nanos: 50_000_000 }, 100)).toBe("⣿⣿⣇\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
+	expect(renderHistogram({ secs: 0, nanos: 50_000_000 }, 100)).toBe("⣿⣿⣆\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
 
 	// 60% (60ms / 100ms) → 3 full slots
 	expect(renderHistogram({ secs: 0, nanos: 60_000_000 }, 100)).toBe("⣿⣿⣿\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
 
 	// 75% (75ms / 100ms) → 3.75 slots filled
-	expect(renderHistogram({ secs: 0, nanos: 75_000_000 }, 100)).toBe("⣿⣿⣿⣷\u001b[38;5;240m⣿\u001b[39m");
+	expect(renderHistogram({ secs: 0, nanos: 75_000_000 }, 100)).toBe("⣿⣿⣿⣧\u001b[38;5;240m⣿\u001b[39m");
 
 	// 80% (80ms / 100ms) → 4 full slots
 	expect(renderHistogram({ secs: 0, nanos: 80_000_000 }, 100)).toBe("⣿⣿⣿⣿\u001b[38;5;240m⣿\u001b[39m");
@@ -83,16 +83,16 @@ test("renderHistogram", () => {
 	expect(renderHistogram({ secs: 0, nanos: 100_000_000 }, 100)).toBe("⣿⣿⣿⣿⣿");
 
 	// 27% (27ms / 100ms) → 1.35 slots → slot 1 gets 35% = level 3
-	expect(renderHistogram({ secs: 0, nanos: 27_000_000 }, 100)).toBe("⣿⣆\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
+	expect(renderHistogram({ secs: 0, nanos: 27_000_000 }, 100)).toBe("⣿⣄\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
 
 	// 34% (34ms / 100ms) → 1.7 slots → slot 1 gets 70% = level 6
-	expect(renderHistogram({ secs: 0, nanos: 34_000_000 }, 100)).toBe("⣿⣷\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
+	expect(renderHistogram({ secs: 0, nanos: 34_000_000 }, 100)).toBe("⣿⣧\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
 
 	// Different max duration: 1 second with max 2 seconds → 50%
-	expect(renderHistogram({ secs: 1, nanos: 0 }, 2000)).toBe("⣿⣿⣇\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
+	expect(renderHistogram({ secs: 1, nanos: 0 }, 2000)).toBe("⣿⣿⣆\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
 
 	// Very fast task: 5ms with max 100ms → 5% → 0.25 slots = level 2
-	expect(renderHistogram({ secs: 0, nanos: 5_000_000 }, 100)).toBe("⣄\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
+	expect(renderHistogram({ secs: 0, nanos: 5_000_000 }, 100)).toBe("⣀\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m\u001b[38;5;240m⣿\u001b[39m");
 
 	// Slowest task compared to itself → 100%
 	expect(renderHistogram({ secs: 0, nanos: 34_000_000 }, 34)).toBe("⣿⣿⣿⣿⣿");

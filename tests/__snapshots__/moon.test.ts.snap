@@ -15,43 +15,43 @@ baz1
 [48;5;236m　[31m⏺[39m STDERR　[49m
 baz2
 ::endgroup::
-::group::[42m PASS [49m ⣿⣿⣿⣿⣷ [1mc:foo[22m [38;5;240m(32ms)[39m
+::group::[42m PASS [49m ⣿⣿⣿⣿⣧ [1mc:foo[22m [38;5;240m(32ms)[39m
 [34m$ echo foo1 && echo foo2 > /dev/stderr[39m
 [48;5;236m　[32m⏺[39m STDOUT　[49m
 foo1
 [48;5;236m　[31m⏺[39m STDERR　[49m
 foo2
 ::endgroup::
-::group::[41m FAIL [49m ⣿⣿⣿⣿⣇ [1mc:make-error[22m [38;5;240m(30ms)[39m
+::group::[41m FAIL [49m ⣿⣿⣿⣿⡇ [1mc:make-error[22m [38;5;240m(30ms)[39m
 [48;5;236m　[31m⏺[39m STDERR　[49m
 This is an error message
 ::endgroup::
-::group::[42m PASS [49m ⣿⣿⣿⣿⣀ [1mb:bar[22m [38;5;240m(29ms)[39m
+::group::[42m PASS [49m ⣿⣿⣿⣿⡀ [1mb:bar[22m [38;5;240m(29ms)[39m
 [34m$ echo bar1 && echo bar2 > /dev/stderr[39m
 [48;5;236m　[32m⏺[39m STDOUT　[49m
 bar1
 [48;5;236m　[31m⏺[39m STDERR　[49m
 bar2
 ::endgroup::
-::group::[42m PASS [49m ⣿⣿⣿⣿⣀ [1mb:baz[22m [38;5;240m(28ms)[39m
+::group::[42m PASS [49m ⣿⣿⣿⣿⡀ [1mb:baz[22m [38;5;240m(28ms)[39m
 [34m$ echo baz1 && echo baz2 > /dev/stderr[39m
 [48;5;236m　[32m⏺[39m STDOUT　[49m
 baz1
 [48;5;236m　[31m⏺[39m STDERR　[49m
 baz2
 ::endgroup::
-::group::[42m PASS [49m ⣿⣿⣿⣿⣄ [1mb:foo[22m [38;5;240m(29ms)[39m
+::group::[42m PASS [49m ⣿⣿⣿⣿⡄ [1mb:foo[22m [38;5;240m(29ms)[39m
 [34m$ echo foo1 && echo foo2 > /dev/stderr[39m
 [48;5;236m　[32m⏺[39m STDOUT　[49m
 foo1
 [48;5;236m　[31m⏺[39m STDERR　[49m
 foo2
 ::endgroup::
-::group::[41m FAIL [49m ⣿⣿⣿⣿⣧ [1mb:make-error[22m [38;5;240m(31ms)[39m
+::group::[41m FAIL [49m ⣿⣿⣿⣿⣇ [1mb:make-error[22m [38;5;240m(31ms)[39m
 [48;5;236m　[31m⏺[39m STDERR　[49m
 This is an error message
 ::endgroup::
-::group::[42m PASS [49m ⣿⣿⣿⣇[38;5;240m⣿[39m [1ma:bar[22m [38;5;240m(24ms)[39m
+::group::[42m PASS [49m ⣿⣿⣿⡇[38;5;240m⣿[39m [1ma:bar[22m [38;5;240m(24ms)[39m
 [34m$ echo bar1 && echo bar2 > /dev/stderr[39m
 [48;5;236m　[32m⏺[39m STDOUT　[49m
 bar1
@@ -65,14 +65,14 @@ baz1
 [48;5;236m　[31m⏺[39m STDERR　[49m
 baz2
 ::endgroup::
-::group::[42m PASS [49m ⣿⣿⣿⣀[38;5;240m⣿[39m [1ma:foo[22m [38;5;240m(21ms)[39m
+::group::[42m PASS [49m ⣿⣿⣿⡀[38;5;240m⣿[39m [1ma:foo[22m [38;5;240m(21ms)[39m
 [34m$ echo foo1 && echo foo2 > /dev/stderr[39m
 [48;5;236m　[32m⏺[39m STDOUT　[49m
 foo1
 [48;5;236m　[31m⏺[39m STDERR　[49m
 foo2
 ::endgroup::
-::group::[41m FAIL [49m ⣿⣿⣿⣀[38;5;240m⣿[39m [1ma:make-error[22m [38;5;240m(21ms)[39m
+::group::[41m FAIL [49m ⣿⣿⣿⡀[38;5;240m⣿[39m [1ma:make-error[22m [38;5;240m(21ms)[39m
 [48;5;236m　[31m⏺[39m STDERR　[49m
 This is an error message
 ::endgroup::"
