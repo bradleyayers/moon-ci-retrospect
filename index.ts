@@ -191,6 +191,15 @@ function formatDuration(duration: { secs: number; nanos: number }): string {
 		seconds += 1;
 		milliseconds = 0;
 	}
+
+	// If >= 60 seconds, show minutes and seconds
+	if (seconds >= 60) {
+		const minutes = Math.floor(seconds / 60);
+		const remainingSeconds = seconds % 60;
+		return `${minutes}m ${remainingSeconds}s)`;
+	}
+
+	// If < 60 seconds, show seconds and milliseconds
 	if (seconds === 0) {
 		return `${milliseconds}ms)`;
 	}
